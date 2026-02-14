@@ -61,7 +61,7 @@ void ordenar(Seleccion *sel){
 
     for(int i=0; i<5; i++){
         for(int j=0; j < 5 - i - 1; j++){
-            if(sel[j].punt > sel[j+1].punt){
+            if(sel[j].punt < sel[j+1].punt){   //Arregle el orden de forma creciente 
                 swap(sel[j].id,sel[j+1].id);
                 swap(sel[j].PG, sel[j+1].PG);
                 swap(sel[j].PE, sel[j+1].PE);
