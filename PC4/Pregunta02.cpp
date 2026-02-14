@@ -41,11 +41,11 @@ void llenarSeleccion(Seleccion *sel){
             if(sel[i].PG > sel[i].PP){
                 sum1 += rand() % 4;    //Mas goles a favor 
                 sum2 += rand() % 2;
-            }else if(sel[i].PG < sel[i].PP)
+            }else{
                 sum1 += rand() % 2;    
                 sum2 += rand() % 4;    //Mas goles en contra
+                }
             }
-        
         sel[i].GF = sum2;
         sel[i].GC = sum1;
         sel[i].dif = sum1 - sum2;
@@ -97,9 +97,10 @@ void buscarCampeon(Seleccion *sel){
 
     //Usa una busqueda lineal para hallar el campeon
     for(int i=0; i<5; i++){
-        if(sel[i].punt > temp);    //Compara los puntaje hasta encontar el puntaje mayor
-        j = i;    //Guarda el indice maximo
-        temp = sel[i].punt;    //Puntaje temporal es guardado para encontrar el mayor 
+         if(sel[i].punt > temp){ //Compara los puntaje hasta encontar el puntaje mayor
+            j = i;    //Guarda el indice maximo
+            temp = sel[i].punt;    //Puntaje temporal es guardado para encontrar el mayor 
+        }  
     }
 
     //Imprime el campeon
@@ -114,7 +115,7 @@ int main(){
     
     srand(time(NULL));    //Se inicia la generacion de los numeros reales 
     
-    llenarSeleccion(sel);
+    llenarSeleccion(sel);   
     imprimirSeleccion(sel);
     
     ordenar(sel);
