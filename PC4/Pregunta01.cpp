@@ -69,10 +69,10 @@ Polinomio* Producto(Polinomio *pol1, Polinomio* pol2, Polinomio *pol3){
 }
 
 void imprimir(Polinomio *pol, int n){
-    for(int i=0; i<=n; i++){
+    for(int i=n; i>=n; i--){
         if(pol[i].coef != 0){
             cout<<pol[i].coef<<"x^"<<pol[i].exp;
-            if(i<n) cout<<" + ";
+            if(i>0) cout<<" + ";
         }
     }
     cout<<endl;
@@ -85,16 +85,16 @@ int main(){
     Polinomio *Pol2 = new Polinomio[2]; //correcion de la memoria asignada 
     Polinomio *Pol3 = new Polinomio[3]; //correcion de la memoria asignada 
 
-    Pol1[0] = {3,2};
+    Pol1[0] = {3,0};
     Pol1[1] = {0,1};
-    Pol1[2] = {1,0};
+    Pol1[2] = {1,2};
 
-    Pol2[0] = {5,1};
-    Pol2[1] = {-4,0};
+    Pol2[0] = {5,0};
+    Pol2[1] = {-4,1};
 
-    Pol3[0] = {1,2};
+    Pol3[0] = {1,0};
     Pol3[1] = {0,1};
-    Pol3[2] = {3,0};
+    Pol3[2] = {3,2};
 
     //Llamar la operacion suma
     Polinomio *SumaPol = sumaPolinomio(Pol1,Pol2, Pol3);
