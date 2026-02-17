@@ -6,7 +6,7 @@ struct Polinomio{
     int exp;
 };
 
-//Funcion suma de polinomios
+// Funcion suma de polinomios
 Polinomio* sumaPolinomio(Polinomio *pol1, Polinomio *pol2, Polinomio *pol3){
     //c1, c2 y c3 guardan el valor temporalmente de los coeficientes de los polinomios pol1, pol2 y pol3
     int c1 = 0; 
@@ -39,40 +39,43 @@ Polinomio* sumaPolinomio(Polinomio *pol1, Polinomio *pol2, Polinomio *pol3){
         Suma[i].coef = c1 + c2 + c3;  //Se suma todos c1, c2 y c3 para hallar el coef suma
         Suma[i].exp = i; //Para mantener el orden ascendente
     }
-    return Suma;
+    return Suma;    //Retorna la suma
 }
 
+// Funcion del Producto de los polinomios
 Polinomio* Producto(Polinomio *pol1, Polinomio* pol2, Polinomio *pol3){
     // Grado maximo
     int gradoMax = 5;
     Polinomio* prod = new Polinomio[gradoMax + 1];
 
-    // Inicializar coeficientes en 0
+    // Inicializar coeficientes en 0, rellenar los coeficientes con 0
     for(int i=0; i <= gradoMax; i++) {
         prod[i].coef = 0;
         prod[i].exp = i;
     }
 
     // Triple ciclo para multiplicar término a término
-    for(int i=0; i<=2; i++){
-        for(int j=0; j<=1; j++){
-            for(int k=0; k<=2; k++){
-                int nuevoCoef = pol1[i].coef * pol2[j].coef * pol3[k].coef;
-                int nuevoExp = pol1[i].exp + pol2[j].exp + pol3[k].exp;
+    for(int i=0; i<=2; i++){    //Multiplicacion del primer polinomio
+        for(int j=0; j<=1; j++){    //Multiplicacion del segundo polinomio 
+            for(int k=0; k<=2; k++){    //Multiplicacion del tercer polinomio
+                int nuevoCoef = pol1[i].coef * pol2[j].coef * pol3[k].coef;       //Rellenamos los coeficientes
+                int nuevoExp = pol1[i].exp + pol2[j].exp + pol3[k].exp;    //Rellenamos los exponentes
                 
-                // El índice en el arreglo prod es: gradoMax - nuevoExp
-                prod[gradoMax - nuevoExp].coef += nuevoCoef;
+                prod[nuevoExp].coef += nuevoCoef;    //Se almacena la suma de los productos de lo polinomio
             }
         }
     }
-    return prod;
+    return prod;    //Retorna el producto
 }
 
+// Imprime el polinomio
 void imprimir(Polinomio *pol, int n){
-    for(int i=n; i>=n; i--){
-        if(pol[i].coef != 0){
-            cout<<pol[i].coef<<"x^"<<pol[i].exp;
-            if(i>0) cout<<" + ";
+    for(int i=n; i>=0; i--){
+        if(pol[i].coef != 0){    //Imprime de orden descendete
+            cout<<pol[i].coef<<"x^"<<pol[i].exp;    //Si el coeficiente es 0 entonces no imprime
+            if(i>0){
+                cout<<" + ";    
+            } 
         }
     }
     cout<<endl;
@@ -85,6 +88,7 @@ int main(){
     Polinomio *Pol2 = new Polinomio[2]; //correcion de la memoria asignada 
     Polinomio *Pol3 = new Polinomio[3]; //correcion de la memoria asignada 
 
+    //Guarda informacion del polinomio
     Pol1[0] = {3,0};
     Pol1[1] = {0,1};
     Pol1[2] = {1,2};
@@ -102,6 +106,7 @@ int main(){
     //LLamar la operacion producto
     Polinomio *ProdPol = Producto(Pol1,Pol2,Pol3);
 
+    //Imprimir cada polinomio, suma y prodcutos
     cout<<"Polinomio 1: ";
     imprimir(Pol1,2);
 
