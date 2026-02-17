@@ -15,6 +15,7 @@ struct Seleccion{
     float rend;
 };
 
+//Llenar la seleccion
 void llenarSeleccion(Seleccion *sel){
 
     for(int i = 0; i < 5; i++){
@@ -57,7 +58,7 @@ void llenarSeleccion(Seleccion *sel){
 
 }
 
-
+//Ordenar la seleccion
 void ordenar(Seleccion *sel){
     //Uso un algoritmo burbuja para ordenarlo
     for(int i=0; i<5; i++){
@@ -79,6 +80,7 @@ void ordenar(Seleccion *sel){
     }
 }
 
+//Imprime la seleccion
 void imprimirSeleccion(Seleccion *sel){
 
     cout<<"Seleccion\tPG\tPE\tPP\tGF\tGC\tDG\tpts\trend(%)"<<endl;
@@ -114,7 +116,8 @@ int main(){
 
     
     srand(time(NULL));    //Se inicia la generacion de los numeros reales 
-    
+
+    //Llamado de la funciones
     llenarSeleccion(sel);   
     imprimirSeleccion(sel);
     
@@ -122,7 +125,8 @@ int main(){
     
     imprimirSeleccion(sel);
     buscarCampeon(sel);
-
+    
+    //Liberacion de la memoria
     delete[] sel;
     sel = nullptr;
 
