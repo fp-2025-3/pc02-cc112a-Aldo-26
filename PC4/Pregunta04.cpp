@@ -72,6 +72,16 @@ Item* itemMasCaro(Pedido* p) {
     return masCaro;
 }
 
+//Funcion para imprimir los items
+void imprimirItems(Item* items, int n) {
+    for(int i = 0; i < n; i++) {
+        cout << "Item " << i + 1 
+             << " " << items[i].descripcion
+             << " | Cant: " << items[i].cantidad
+             << " | Precio: " << items[i].precioUnitario << endl;
+    }
+}
+
 // Función para liberar memoria adecuadamente 
 void liberarPedido(Pedido* p) {
     if (p == nullptr) return;
@@ -96,16 +106,25 @@ int main() {
     Pedido* miPedido = crearPedido(101, "Juan Perez", 2);
 
     // Editamos los items manualmente para probar
-    miPedido->items[0] = crearItem("Monitor 24'", 1, 150.50);
-    miPedido->items[1] = crearItem("Mouse Gamer", 2, 25.00);
+    miPedido->items[0] = crearItem("Laptop", 1, 100.0);
+    miPedido->items[1] = crearItem("Mouse", 2, 200.0);
+    miPedido->items[2] = crearItem("Teclado", 3, 300.0);
 
     cout << "Cliente: " << miPedido->nombreCliente << endl;
-    cout << "Total del pedido: $" << calcularTotal(miPedido) << endl;
+    cout << "--- Detalle de Items ---" << endl;
+    
+    // Corregido: El nombre del puntero es miPedido->items
+    imprimirItems(miPedido->items, miPedido->cantidadItems);
+
+    cout << "------------------------" << endl;
+    cout << "Total del pedido: " << calcularTotal(miPedido) << endl;
 
     Item* caro = itemMasCaro(miPedido);
-    cout << "Item mas caro: " << caro->descripcion << " ($" << caro->precioUnitario << ")" << endl;
+    if(caro) {
+        cout << "Item mas caro: " << caro->descripcion << " | " << caro->precioUnitario << endl;
+    }
 
-    // Liberar todo al finalizar
+    //Liberar todo al finalizar
     liberarPedido(miPedido);
     miPedido = nullptr;
 
