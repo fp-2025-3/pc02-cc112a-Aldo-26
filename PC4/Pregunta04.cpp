@@ -103,7 +103,7 @@ void liberarPedido(Pedido* p) {
 
 int main() {
     // Ejemplo de uso
-    Pedido* miPedido = crearPedido(101, "Juan Perez", 2);
+    Pedido* miPedido = crearPedido(101, "Carlos Perez", 2);
 
     // Editamos los items manualmente para probar
     miPedido->items[0] = crearItem("Laptop", 1, 100.0);
