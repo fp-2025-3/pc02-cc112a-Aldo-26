@@ -48,43 +48,42 @@ int main(){
     return 0;
 }
 
-Producto crearProducto(int codigo, const char* nombre, double precio, int stock){
-    char temp[100];    //Asignamos una memoria dinamica para guardar el nombre del Producto
+Producto crearProducto(int codigo, const char* nombre, double precio, int stock) {
+    Producto p;
 
-    //Ingresamos los datos del Producto
-    cout<<"Ingrese el codigio: ";
-    cin>>codigo;
+    //Se guarda la informacion de cada producto
+    p.codigo = codigo;
+    p.precio = precio;
+    p.stock = stock;
 
-    cout<<"Ingrese el nombre del producto: ";
-    cin.ignore();
-    cin.getline(temp,100);
+    // Reservar memoria dinámica para el nombre basado en el parámetro 'nombre'
+    p.nombre = new char[strlen(nombre) + 1];
+    strcpy(p.nombre, nombre);    //Se copia el producto del con el nombre
 
-    cout<<"Ingrese el precio ";
-    cin>>precio;
-
-    cout<<"Ingrese el stock";
-    cin>>stock;
-
-    // Reservar memoria para nombre del Producto
-    char* nombreCopia = new char[strlen(temp) + 1];
-    strcpy(nombreCopia, temp);    //Copiamos el temp en la memoria dinamica
-    
-    Producto prod = {codigo, nombreCopia, precio, stock};    //Creamos prod con los datos dados
-    return prod;    //Retornamos el Producto
+    return p; //Retorna en p
 }
 
-//Creamos el inventario 
-Producto* CrearInventario(int n){
-    //Se crea una estructura con n valores
+Producto* CrearInventario(int n) {
     Producto *inv = new Producto[n];
 
-    //Llenamos cada uno de los inventarios
-    for(int i=0; i<n; i++){
-        cout<<"--- Producto " << i+1 <<" ---"<<endl;
-        //Llamamos a la funcion crear producto para llenar cada inventario 
-        inv[i] = crearProducto(0,"",0,0);    //Inicializamos en 0, "", 0 y 0 y luego sera modificado
+    for (int i = 0; i < n; i++) {
+        int cod, stk;
+        double pre;
+        char tempNom[100];
+        //Introducir los datos 
+        cout << "\n--- Datos del Producto " << i + 1 << " ---" << endl;
+        cout << "Codigo: "; cin >> cod;
+        //Introducimos el nombre
+        cout << "Nombre: "; 
+        cin.ignore(); 
+        cin.getline(tempNom, 100);
+        cout << "Precio: "; cin >> pre;
+        cout << "Stock: "; cin >> stk;
+
+        // Llamamos a la función pasando los datos agregados
+        inv[i] = crearProducto(cod, tempNom, pre, stk); 
     }
-    return inv;    //Retorna el inventario completo
+    return inv;
 }
 
 //Funcion que busca el producto
