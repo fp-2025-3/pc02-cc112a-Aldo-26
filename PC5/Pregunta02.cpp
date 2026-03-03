@@ -11,43 +11,50 @@ struct Empleados{
 
 int main(){
 
-    fstream lectura("empleados.dat", ios::binary);
+    fstream lectura("empleados.dat", ios::binary | ios::in | ios:: out);
 
     if(!lectura){
         cout<<"El archivo no se pudo abrir ";
         return 1;
     }
-
-    string linea;
-    int cont = 0;
     
-    while(getline(lectura,linea)){
-        cont++;
-    }
+    lectura.seekg(0, ios::end); // Ir al final
+    long tamanoArchivo = lectura.tellg();
+    int cont = tamanoArchivo / sizeof(Empleados);
+    lectura.seekg(0, ios::beg); // Regresar al inicio
 
-    Empleados *E = new Empleados [cont-1];
+    Empleados *E = new Empleados [cont];
 
-    for(int i=0; i<cont-1; i++){
-        while(lectura.read((char*)&E, sizeof(Empleados))){
-            lectura >> E[i].id >> E[i].nombre >> E[i].salario;
-        }
+    for (int i = 0; i < cont; i++) {
+        lectura.read((char*)&E[i], sizeof(Empleados));
     }
 
     int ID;
-
     cout<<"Ingrese el ID del empleado: ";
     cin>>ID;
 
-    cout<<"-------DATOS DEL EMPLEADO--------"<<endl;
-    cout<<"ID: "<< E[ID].id <<endl;
-    cout<<"Nombre: "<< E[ID].nombre <<endl;
-    cout<<"Salario: "<< E[ID].salario <<endl;
+    int indice = ID - 1;
+    if (indice >= 0 && indice < cont) {
+        cout << "-------DATOS ACTUALES--------" << endl;
+        cout << "ID: " << E[indice].id << endl;
+        cout << "Nombre: " << E[indice].nombre << endl;
+        cout << "Salario: " << E[indice].salario << endl;
 
-    int sal = 0;
-    cout << "Ingrese el nuevo salario: ";
-    cin >> sal;
+        double nuevoSal;
+        cout << "Ingrese el nuevo salario: ";
+        cin >> nuevoSal;
 
-    E[ID-1].salario = sal;
+        E[indice].salario = nuevoSal;
 
+        lectura.seekp(indice * sizeof(Empleados), ios::beg);
+        lectura.write((char*)&E[indice], sizeof(Empleados));
+
+        cout << "Salario actualizado en el archivo." << endl;
+    } else {
+        cout << "ID fuera de rango." << endl;
+    }
+
+    delete[] E;
+    lectura.close();
     return 0;
 }
