@@ -21,25 +21,34 @@ void crearArchivo(int N){
         archivo.open("proyectos.dat", ios::out | ios:: in);
     }
 
-    Proyecto p[N];
+    Proyecto p;
     
     for(int i=0; i<N; i++){
 
-        int id;
-        cout<<"Ingrese la id: ";
-        cin>>p[i].id;
+        cout<<"\n Ingrese el ID: ";
+        cin>>p.id;
 
-        cout<<"Ingrese el titulo del proyecto: ";
-        cin.ignore();
-        cin.getline(p[i].titulo,40);
+        int pos = sizeof(Proyecto)*(p.id - 1);
+        
+        archivo.seekg(pos);
+        Proyecto temp;
 
-        cout<<"Ingrese el presupuesto del proyecto: ";
-        cin>>p[i].presupuesto;
+        if(archivo.read((char*)&temp, sizeof(Proyecto)) && temp.id == p.id){
+            cout<<"La ID ya existe";
+            i--;
+        }else{
+            cout<<"Ingrese el titulo del proyecto: ";
+            cin.ignore();
+            cin.getline(p[i].titulo,40);
+    
+            cout<<"Ingrese el presupuesto del proyecto: ";
+            cin>>p[i].presupuesto;
+    
+            cout<<"Ingrese la duracion del proyecto: ";
+            cin>>p[i].duracionMes;
 
-        cout<<"Ingrese la duracion del proyecto: ";
-        cin>>p[i].duracionMes;
-
-        archivo.write((char*)&p, sizeof(Proyecto));
+            archivo.write((char*)&p, sizeof(Proyecto));
+        }
     }
     archivo.close();
 }
@@ -47,6 +56,10 @@ void crearArchivo(int N){
 void mostrarArchivo(){
 
     ifstream archivo("proyectos.dat", ios::binary | ios::in);
+    if (!archivo) {
+        cout << "No existe el archivo de datos." << endl;
+        return;
+    }
 
     Proyecto p;
 
