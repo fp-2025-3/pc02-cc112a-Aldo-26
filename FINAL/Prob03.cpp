@@ -11,7 +11,26 @@ struct Proyecto
     int duracionMes;
 };
 
-void crearArchivo(int N){
+bool idExiste(int id) {
+    ifstream archivo("proyecto.dat", ios::binary);
+    if (!archivo) {
+        return false;
+    }
+
+    Proyecto p;
+    while (archivo.read((char*)&p, sizeof(Proyecto))) {
+        if (p.id == id){
+            return true;
+        }
+    }
+    return false;
+}
+
+void crearArchivo(Proyecto nuevo){
+    if (idExiste(nuevo.id)) {
+        cout << "Error: El ID " << nuevo.id << " ya existe. Registro saltado." << endl;
+        return;
+    }
 
     fstream archivo("proyectos.dat", ios::binary | ios::out | ios::in);
 
@@ -21,40 +40,34 @@ void crearArchivo(int N){
         archivo.open("proyectos.dat", ios::out | ios:: in);
     }
 
-    Proyecto p;
+    archivo.seekg(0, ios::end);
+    long tamanoArchivo = archivo.tellg();
+    int n = tamanoArchivo / sizeof(Proyecto);
     
-    for(int i=0; i<N; i++){
+    int i = n - 1;
+    Proyecto temp;
 
-        cout<<"\n Ingrese el ID: ";
-        cin>>p.id;
+    while (i >= 0) {
+        archivo.seekg(i * sizeof(Proyecto));
+        archivo.read((char*)&temp, sizeof(Proyecto));
 
-        int pos = sizeof(Proyecto)*(p.id - 1);
-        
-        archivo.seekg(pos);
-        Proyecto temp;
-
-        if(archivo.read((char*)&temp, sizeof(Proyecto)) && temp.id == p.id){
-            cout<<"La ID ya existe";
+        if (temp.presupuesto < nuevo.presupuesto) {
+            archivo.seekp((i + 1) * sizeof(Proyecto));
+            archivo.write((char*)&temp, sizeof(Proyecto));
             i--;
-        }else{
-            cout<<"Ingrese el titulo del proyecto: ";
-            cin.ignore();
-            cin.getline(p[i].titulo,40);
-    
-            cout<<"Ingrese el presupuesto del proyecto: ";
-            cin>>p[i].presupuesto;
-    
-            cout<<"Ingrese la duracion del proyecto: ";
-            cin>>p[i].duracionMes;
-
-            archivo.write((char*)&p, sizeof(Proyecto));
+        } else {
+            break; 
         }
     }
+
+    archivo.clear();
+    archivo.seekp((i + 1) * sizeof(Proyecto));
+    archivo.write((char*)&nuevo, sizeof(Proyecto));
     archivo.close();
 }
 
 void mostrarArchivo(){
-
+    
     ifstream archivo("proyectos.dat", ios::binary | ios::in);
     if (!archivo) {
         cout << "No existe el archivo de datos." << endl;
@@ -69,7 +82,7 @@ void mostrarArchivo(){
         cout<<"ID: "<<p.id<<endl;
         cout<<"Titulo: "<<p.titulo<<endl;
         cout<<"Presupuesto: "<<p.presupuesto<<endl;
-        cout<<"Duracion(por mes)"<<p.duracionMes<<endl;
+        cout<<"Duracion(por mes): "<<p.duracionMes<<endl;
         i++;
     }
 
@@ -88,21 +101,20 @@ int main(){
         cout<<"3. Salir "<<endl;
         cin>>op;
 
-        switch (op){
-            case 1:
-                cout<<"Ingresa la cantida de archivos a ingresa ";
-                cin>>n;
-                
-                crearArchivo(n);
-            break;
-            
-            case 2:
-                mostrarArchivo();
-            break;
-
-            default:
-            break;
-        
+        if (op == 1) {
+            cout << "Cantidad de proyectos: ";
+            cin >> n;
+            for (int i = 0; i < n; i++) {
+                Proyecto p;
+                cout << "\nProyecto " << i + 1 << endl;
+                cout << "ID: "; cin >> p.id;
+                cout << "Titulo: "; cin.ignore(); cin.getline(p.titulo, 40);
+                cout << "Presupuesto: "; cin >> p.presupuesto;
+                cout << "Duracion (meses): "; cin >> p.duracionMes;
+                crearArchivo(p);
+            }
+        } else if (op == 2) {
+            mostrarArchivo();
         }
     } while (op != 3);
 
